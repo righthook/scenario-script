@@ -1,0 +1,39 @@
+{
+  "locations": [
+    {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "type": "location_local"
+    },
+    {
+      "x": 100.0,
+      "y": 0.0,
+      "z": 0.0,
+      "type": "location_local"
+    },
+    {
+      "x": 120.0,
+      "y": 0.0,
+      "z": 0.0,
+      "type": "location_local"
+    }
+  ],
+  "orientations": null,
+  "velocities": null,
+  "angular_velocities": null,
+  "times": [
+    {
+      "t": 0.0,
+      "type": "sim_time_local"
+    },
+    {
+      "t": 10.0,
+      "type": "sim_time_local"
+    },
+    {
+      "t": 20.0,
+      "type": "sim_time_local"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "vehicle_physics_model": "advanced",
+  "process": "traffic",
+  "type": "ref_co_vehicle_implementation"
+}

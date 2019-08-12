@@ -1,0 +1,113 @@
+{
+  "version": "v0.1",
+  "uuid": "3f1c058e-5596-45ec-8c66-85184fd2c877",
+  "environment": {
+    "place": null,
+    "time": null,
+    "weather": null
+  },
+  "actors": {
+    "vehicles": [
+      {
+        "initial": {
+          "velocity": {
+            "u": 25.0,
+            "v": 0.1,
+            "w": -0.1,
+            "type": "velocity_body_frame"
+          },
+          "angular_velocity": {
+            "p": 0.1,
+            "q": -0.1,
+            "r": 1.0,
+            "type": "angular_velocity_body_frame"
+          },
+          "location": {
+            "x": 1.0,
+            "y": 2.0,
+            "z": -3.0,
+            "type": "location_local"
+          },
+          "orientation": {
+            "e_x": 0.707,
+            "e_y": 0.707,
+            "e_z": 0.0,
+            "e_0": 0.0,
+            "type": "orientation_quaternion"
+          }
+        },
+        "asset": null,
+        "intent": {
+          "model": null,
+          "type": "vehicle_intent_wander"
+        },
+        "name": "vehicle_000",
+        "uuid": "8db3ede9-8bb5-404e-a4c1-9dbef79ca169",
+        "implementation": null
+      }
+    ],
+    "pedestrians": [
+      {
+        "initial": {
+          "velocity": {
+            "u": 25.0,
+            "v": 0.1,
+            "w": -0.1,
+            "type": "velocity_body_frame"
+          },
+          "angular_velocity": {
+            "p": 0.1,
+            "q": -0.1,
+            "r": 1.0,
+            "type": "angular_velocity_body_frame"
+          },
+          "location": {
+            "x": 1.0,
+            "y": 2.0,
+            "z": -3.0,
+            "type": "location_local"
+          },
+          "orientation": {
+            "e_x": 0.707,
+            "e_y": 0.707,
+            "e_z": 0.0,
+            "e_0": 0.0,
+            "type": "orientation_quaternion"
+          }
+        },
+        "asset": null,
+        "intent": {
+          "model": null,
+          "type": "pedestrian_intent_wander"
+        },
+        "name": "pedestrian_000",
+        "uuid": "b560c177-e496-4f70-849d-5afc745dd53a",
+        "implementation": null
+      }
+    ]
+  },
+  "static_obstacles": [
+    {
+      "initial": {
+        "location": {
+          "x": 1.0,
+          "y": 2.0,
+          "z": -3.0,
+          "type": "location_local"
+        },
+        "orientation": {
+          "e_x": 0.707,
+          "e_y": 0.707,
+          "e_z": 0.0,
+          "e_0": 0.0,
+          "type": "orientation_quaternion"
+        }
+      },
+      "asset": null,
+      "name": "obstacle_000",
+      "uuid": "bf555e40-9892-480f-8158-85dfe9ada905",
+      "implementation": null
+    }
+  ],
+  "implementation": null
+}

@@ -1,0 +1,713 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"$id": "https://www.scenarioscript.org/scenario.json",
+	"type": "object",
+	"title": "ScenarioScript Scenario Schema",
+	"properties": {
+		"version": {
+			"$id": "#/version",
+			"title": "The version of the scenario schema",
+			"type": "string",
+			"enum": [ "v0.1" ]
+		},
+		"uuid": {
+			"$id": "#/uuid",
+			"title": "A unique identifier for the scenario",
+			"$ref": "#/definitions/uuid"
+		},
+		"environment": {
+			"$id": "#/environment",
+			"type": "object",
+			"title": "A description of the scene",
+			"properties": {
+				"place": {
+					"$id": "#/environment/place",
+					"title": "Where the scenario takes place (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				},
+				"time": {
+					"$id": "#/environment/time",
+					"title": "When the scenario takes place (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				},
+				"weather": {
+					"$id": "#/environment/weather",
+					"title": "Weather the scenario takes place in (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "place", "time", "weather" ]
+		},
+		"actors": {
+			"$id": "#/actors",
+			"title": "An encapsulation of the dynamic actors in the scenario",
+			"type": "object",
+			"properties": {
+				"vehicles": {
+					"$id": "#/vehicles",
+					"title": "The list of vehicles",
+					"type": "array",
+					"items": [
+						{ "$ref": "#/definitions/vehicle" }
+					]
+				},
+				"pedestrians": {
+					"$id": "#/pedestrians",
+					"title": "The list of pedestrians",
+					"type": "array",
+					"items": [
+						{ "$ref": "#/definitions/pedestrian" }
+					]
+				}
+			},
+			"required": [ "vehicles", "pedestrians" ]
+		},
+		"static_obstacles": {
+			"$id": "#/static_obstacles",
+			"title": "The list of static obstacles",
+			"type": "array",
+			"items": [
+				{ "$ref": "#/definitions/static_obstacle" }
+			]
+		},
+		"implementation": {
+			"$id": "#/implementation",
+			"title": "Company-specific implementation details at the scenario level (abstract)",
+			"oneOf": [
+				{ "type": "null" },
+				{ "$ref": "#/definitions/abstract_element" }
+			]
+		}
+	},
+	"required": [ "version", "uuid", "environment", "actors" ],
+	"definitions": {
+		"abstract_element": {
+			"$id": "#/definitions/abstract_element",
+			"title": "An element that implementors are free to extend",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string" }
+			},
+			"required": [ "type" ]
+		},
+		"uuid": {
+			"$id": "#/definitions/uuid",
+			"title": "A v4 UUID",
+			"type": "string",
+			"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+		},
+		"location": {
+			"$id": "#/definitions/location",
+			"title": "A location",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/location_crs" },
+				{ "$ref": "#/definitions/location_local" },
+				{ "$ref": "#/definitions/location_utm" },
+				{ "$ref": "#/definitions/location_wgs84" }
+			],
+			"required": [ "type" ]
+		},
+		"location_crs": {
+			"$id": "#/definitions/location_crs",
+			"title": "A location in a frame created by a CRS",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "location_crs" ] },
+				"crs": { "type": "string" },
+				"x": { "type": "number" },
+				"y": { "type": "number" },
+				"z": { "type": "number" }
+			},
+			"required": [ "x", "y", "z", "crs" ]
+		},
+		"location_local": {
+			"$id": "#/definitions/location_local",
+			"title": "A location in a local 3d Cartesian coordinate frame",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "location_local" ] },
+				"x": { "type": "number" },
+				"y": { "type": "number" },
+				"z": { "type": "number" }
+			},
+			"required": [ "x", "y", "z" ]
+		},
+		"location_utm": {
+			"$id": "#/definitions/location_utm",
+			"title": "A location in a UTM frame",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "location_utm" ] },
+				"zone": { "type": "string", "pattern": "^[0-9]+[nNsS]$" },
+				"easting": { "type": "number" },
+				"northing": { "type": "number" },
+				"altitude": { "type": "number" }
+			},
+			"required": [ "zone", "easting", "northing", "altitude" ]
+		},
+		"location_wgs84": {
+			"$id": "#/definitions/location_wgs84",
+			"title": "A location in the WGS84 frame",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "location_wgs84" ] },
+				"longitude": { "type": "number", "minimum": -180.0, "maximum": 180.0 },
+				"latitude": { "type": "number", "minimum": -90.0, "maximum": 90.0 },
+				"altitude": { "type": "number" }
+			},
+			"required": [ "longitude", "latitude", "altitude" ]
+		},
+		"orientation": {
+			"$id": "#/definitions/orientation",
+			"title": "An orientation",
+			"type": "object",
+			"anyOf": [
+				{ "$ref": "#/definitions/orientation_quaternion" },
+				{ "$ref": "#/definitions/orientation_euler_321" }
+			],
+			"required": [ "type" ]
+		},
+		"orientation_quaternion": {
+			"$id": "#/definitions/orientation_quaternion",
+			"title": "A quaternion",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "orientation_quaternion" ] },
+				"e_x": { "type": "number" },
+				"e_y": { "type": "number" },
+				"e_z": { "type": "number" },
+				"e_0": { "type": "number" }
+			},
+			"required": [ "e_x", "e_y", "e_z", "e_0" ]
+		},
+		"orientation_euler_321": {
+			"$id": "#/definitions/orientation_euler_321",
+			"title": "Three Euler angles corresponding to a 3-2-1 rotation sequence",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "orientation_euler_321" ] },
+				"yaw": { "type": "number" },
+				"pitch": { "type": "number" },
+				"roll": { "type": "number" }
+			},
+			"required": [ "yaw", "pitch", "roll" ]
+		},
+		"velocity": {
+			"$id": "#/definitions/velocity",
+			"title": "A velocity",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/velocity_body_frame" },
+				{ "$ref": "#/definitions/velocity_body_frame_1d" }
+			],
+			"required": [ "type" ]
+		},
+		"velocity_body_frame": {
+			"$id": "#/definitions/velocity_body_frame",
+			"title": "A velocity in the body-fixed frame",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "velocity_body_frame" ] },
+				"u": { "type": "number" },
+				"v": { "type": "number" },
+				"w": { "type": "number" }
+			},
+			"required": [ "u", "v", "w" ]
+		},
+		"velocity_body_frame_1d": {
+			"$id": "#/definitions/velocity_body_frame_1d",
+			"title": "A forward velocity",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "velocity_body_frame_1d" ] },
+				"speed": { "type": "number" }
+			},
+			"required": [ "speed" ]
+		},		
+		"angular_velocity": {
+			"$id": "#/definitions/angular_velocity",
+			"title": "An angular velocity",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/angular_velocity_body_frame" },
+				{ "$ref": "#/definitions/angular_velocity_body_frame_1d" }
+			],
+			"required": [ "type" ]
+		},
+		"angular_velocity_body_frame": {
+			"$id": "#/definitions/angular_velocity_body_frame",
+			"title": "An angular velocity in the body-fixed frame",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "angular_velocity_body_frame" ] },
+				"p": { "type": "number" },
+				"q": { "type": "number" },
+				"r": { "type": "number" }
+			},
+			"required": [ "p", "q", "r" ]
+		},
+		"angular_velocity_body_frame_1d": {
+			"$id": "#/definitions/angular_velocity_body_frame_1d",
+			"title": "A rotation rate about the body-fixed z-axis",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "angular_velocity_body_frame_1d" ] },
+				"yaw_rate": { "type": "number" }
+			},
+			"required": [ "yaw_rate" ]
+		},
+		"sim_time": {
+			"$id": "#/definitions/sim_time",
+			"title": "A time for use in describing trajectories (abstract)",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/sim_time_local" }
+			],
+			"required": [ "type" ]
+		},
+		"sim_time_local": {
+			"$id": "#/definitions/sim_time",
+			"title": "A time relative to simulation start for use in describing trajectories",
+			"type": "object",
+			"properties": {
+				"type": { "type": "string", "enum": [ "sim_time_local" ] },
+				"t": { "type": "number" }
+			},
+			"required": [ "t" ]
+		},
+		"initial_static": {
+			"$id": "#/definitions/initial_static",
+			"title": "An initial condition for a static object",
+			"type": "object",
+			"properties": {
+				"location": { "$ref": "#/definitions/location" },
+				"orientation": { "$ref": "#/definitions/orientation" }
+			},
+			"required": [ "location", "orientation" ]
+		},
+		"initial_dynamic": {
+			"$id": "#/definitions/vehicle",
+			"title": "An initial condition for a dynamic object",
+			"type": "object",
+			"properties": {
+				"location": { "$ref": "#/definitions/location" },
+				"orientation": { "$ref": "#/definitions/orientation" },
+				"velocity": { "$ref": "#/definitions/velocity" },
+				"angular_velocity": { "$ref": "#/definitions/angular_velocity" }
+			},
+			"required": [ "location", "orientation", "velocity", "angular_velocity" ]
+		},
+		"trajectory": {
+			"$id": "#/definitions/trajectory",
+			"title": "A sequence of states for describing motion",
+			"type": "object",
+			"properties": {
+				"locations": {
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{ "$ref": "#/definitions/location" }
+						]
+					}
+				},
+				"orientations": {
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{ "$ref": "#/definitions/orientation" }
+						]
+					}
+				},
+				"velocities": {
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{ "$ref": "#/definitions/velocity" }
+						]
+					}
+				},
+				"angular_velocities": {
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{ "$ref": "#/definitions/angular_velocity" }
+						]
+					}
+				},
+				"times": {
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{ "$ref": "#/definitions/sim_time" }
+						]
+					}
+				}
+			}
+		},
+		"vehicle_intent": {
+			"$id": "#/definitions/vehicle_intent",
+			"title": "The vehicle's actions during the simulation",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/vehicle_intent_deactivated" },
+				{ "$ref": "#/definitions/vehicle_intent_user_controlled" },
+				{ "$ref": "#/definitions/vehicle_intent_wander" },
+				{ "$ref": "#/definitions/vehicle_intent_destination_route" },
+				{ "$ref": "#/definitions/vehicle_intent_enumerated_route" },
+				{ "$ref": "#/definitions/vehicle_intent_kinematic_trajectory" },
+				{ "$ref": "#/definitions/vehicle_intent_reference_trajectory" }
+			],
+			"required": [ "type" ]
+		},
+		"vehicle_intent_deactivated": {
+			"$id": "#/definitions/vehicle_intent_deactivated",
+			"title": "The vehicle is deactiated",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_deactivated" ] }
+			}
+		},
+		"vehicle_intent_user_controlled": {
+			"$id": "#/definitions/vehicle_intent_user_controlled",
+			"title": "The vehicle is controlled by the user",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_user_controlled" ] }
+			}
+		},
+		"vehicle_intent_wander": {
+			"$id": "#/definitions/vehicle_intent_wander",
+			"title": "The vehicle wanders the road network",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_wander" ] },
+				"model": {
+					"$id": "#/definitions/vehicle_intent_wander/model",
+					"title": "The model parameters the vehicle will use when wandering (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "model" ]
+		},
+		"vehicle_intent_destination_route": {
+			"$id": "#/definitions/vehicle_intent_destination_route",
+			"title": "The vehicle travels over the road network to the given point",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_destination_route" ] },
+				"destination": { "$ref": "#/definitions/location" },
+				"model": {
+					"$id": "#/definitions/vehicle_intent_destination_route/model",
+					"title": "The model parameters the vehicle will use when navigating to destination (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "destination", "model" ]
+		},
+		"vehicle_intent_enumerated_route": {
+			"$id": "#/definitions/vehicle_intent_enumerated_route",
+			"title": "The vehicle takes a certain sequence of paths",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_enumerated_route" ] },
+				"route": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"model": {
+					"$id": "#/definitions/vehicle_intent_enumerated_route/model",
+					"title": "The model parameters the vehicle will use when following the route (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "route", "model" ]
+		},
+		"vehicle_intent_kinematic_trajectory": {
+			"$id": "#/definitions/vehicle_intent_kinematic_trajectory",
+			"title": "The vehicle does a series of transforms",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_kinematic_trajectory" ] },
+				"trajectory": { "$ref": "#/definitions/trajectory" },
+				"model": {
+					"$id": "#/definitions/vehicle_intent_kinematic_trajectory/model",
+					"title": "The model parameters the vehicle will use when following the trajectory (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "trajectory", "model" ]
+		},
+		"vehicle_intent_reference_trajectory": {
+			"$id": "#/definitions/vehicle_intent_reference_trajectory",
+			"title": "The vehicle runs a controller to follow a path",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "vehicle_intent_reference_trajectory" ] },
+				"trajectory": { "$ref": "#/definitions/trajectory" },
+				"model": {
+					"$id": "#/definitions/vehicle_intent_reference_trajectory/model",
+					"title": "The model parameters the vehicle will use when following the trajectory (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "model" ]
+		},
+		"vehicle": {
+			"$id": "#/definitions/vehicle",
+			"title": "A vehicle",
+			"type": "object",
+			"properties": {
+				"name": {
+					"$id": "#/definitions/vehicle/name",
+					"title": "The name of the vehicle",
+					"type": "string",
+					"pattern": "^[0-9a-zA-Z_]+$"
+				},
+				"uuid": {
+					"$id": "#/definitions/vehicle/uuid",
+					"title": "A unique identifier for the vehicle",
+					"$ref": "#/definitions/uuid"
+				},
+				"initial": {
+					"$id": "#/definitions/vehicle/initial",
+					"title": "The vehicle's initial condition",
+					"$ref": "#/definitions/initial_dynamic"
+				},
+				"asset": {
+					"$id": "#/definitions/vehicle/asset",
+					"title": "The visual and physical properties of the vehicle (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				},
+				"intent": {
+					"$id": "#/definitions/vehicle/intent",
+					"title": "What the vehicle will do during the simulation",
+					"$ref": "#/definitions/vehicle_intent"
+				},
+				"implementation": {
+					"$id": "#/definitions/vehicle/implementation",
+					"title": "Company-specific implementation details for vehicles (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "name", "uuid", "initial", "asset", "intent" ]
+		},
+		"pedestrian_intent": {
+			"$id": "#/definitions/pedestrian_intent",
+			"title": "The pedestrian's actions during the simulation",
+			"type": "object",
+			"oneOf": [
+				{ "$ref": "#/definitions/pedestrian_intent_deactivated" },
+				{ "$ref": "#/definitions/pedestrian_intent_destination_route" },
+				{ "$ref": "#/definitions/pedestrian_intent_kinematic_trajectory" },
+				{ "$ref": "#/definitions/pedestrian_intent_reference_trajectory" },
+				{ "$ref": "#/definitions/pedestrian_intent_user_controlled" },
+				{ "$ref": "#/definitions/pedestrian_intent_wander" }
+			],
+			"required": [ "type" ]
+		},
+		"pedestrian_intent_deactivated": {
+			"$id": "#/definitions/pedestrian_intent_deactivated",
+			"title": "The pedestrian idles in place",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_deactivated" ] }
+			}
+		},
+		"pedestrian_intent_destination_route": {
+			"$id": "#/definitions/pedestrian_intent_destination_route",
+			"title": "The pedestrian navigates the pedestrian infrastructure to a point",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_destination_route" ] },
+				"destination": { "$ref": "#/definitions/location" },
+				"model": {
+					"$id": "#/definitions/pedestrian_intent_destination_route/model",
+					"title": "The model parameters the pedestrian will use when navigating to the destination (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "destination", "model" ]
+		},
+		"pedestrian_intent_kinematic_trajectory": {
+			"$id": "#/definitions/pedestrian_intent_kinematic_trajectory",
+			"title": "The pedestrian exactly follows a trajectory",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_kinematic_trajectory" ] },
+				"trajectory": { "$ref": "#/definitions/trajectory" },
+				"model": {
+					"$id": "#/definitions/pedestrian_intent_kinematic_trajectory/model",
+					"title": "The model parameters the pedestrian will use when following the trajectory (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "trajectory", "model" ]
+		},
+		"pedestrian_intent_reference_trajectory": {
+			"$id": "#/definitions/pedestrian_intent_reference_trajectory",
+			"title": "The pedestrian uses a closed-loop controller and model to follow the trajectory",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_reference_trajectory" ] },
+				"trajectory": { "$ref": "#/definitions/trajectory" },
+				"model": {
+					"$id": "#/definitions/pedestrian_intent_reference_trajectory/model",
+					"title": "The model parameters the pedestrian will use when following the trajectory (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "trajectory", "model" ]
+		},
+		"pedestrian_intent_user_controlled": {
+			"$id": "#/definitions/pedestrian_intent_user_controlled",
+			"title": "The pedestrian is externally controlled",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_user_controlled" ] }
+			}
+		},
+		"pedestrian_intent_wander": {
+			"$id": "#/definitions/pedestrian_intent_wander",
+			"title": "The pedestrian wanders over the pedestrian infrastructure",
+			"type": "object",
+			"properties": {
+				"type": { "enum": [ "pedestrian_intent_wander" ] },
+				"model": {
+					"$id": "#/definitions/pedestrian_intent_wander/model",
+					"title": "The model parameters the pedestrian will use when wandering (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "model" ]
+		},
+		"pedestrian": {
+			"$id": "#/definitions/pedestrian",
+			"title": "A pedestrian",
+			"type": "object",
+			"properties": {
+				"name": {
+					"$id": "#/definitions/pedestrian/name",
+					"title": "The name of the pedestrian",
+					"type": "string",
+					"pattern": "^[0-9a-zA-Z_]+$"
+				},
+				"uuid": {
+					"$id": "#/definitions/pedestrian/uuid",
+					"title": "A unique identifier for the pedestrian",
+					"$ref": "#/definitions/uuid"
+				},
+				"initial": {
+					"$id": "#/definitions/pedestrian/initial",
+					"title": "The pedestrian's initial condition",
+					"$ref": "#/definitions/initial_dynamic"
+				},
+				"asset": {
+					"$id": "#/definitions/pedestrian/asset",
+					"title": "The visual and physical properties of the pedestrian (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				},
+				"intent": {
+					"$id": "#/definitions/pedestrian/intent",
+					"type": "object",
+					"title": "What the pedestrian will do during the simulation",
+					"$ref": "#/definitions/pedestrian_intent"
+				},
+				"implementation": {
+					"$id": "#/definitions/pedestrian/implementation",
+					"title": "Company-specific implementation details for pedestrians (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "name", "uuid", "initial", "asset", "intent" ]
+		},
+		"static_obstacle": {
+			"$id": "#/definitions/static_obstacle",
+			"title": "A static obstacle",
+			"type": "object",
+			"properties": {
+				"name": {
+					"$id": "#/definitions/static_obstacle/name",
+					"title": "The name of the static obstacle",
+					"type": "string",
+					"pattern": "^[0-9a-zA-Z_]+$"
+				},
+				"uuid": {
+					"$id": "#/definitions/static_obstacle/uuid",
+					"title": "A unique identifier for the static obstacle",
+					"$ref": "#/definitions/uuid"
+				},
+				"initial": {
+					"$id": "#/definitions/static_obstacle/initial",
+					"title": "The obstacle's initial condition",
+					"$ref": "#/definitions/initial_static"
+				},
+				"asset": {
+					"$id": "#/definitions/static_obstacle/asset",
+					"title": "The visual and physical properties of the static obstacle (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				},
+				"implementation": {
+					"$id": "#/definitions/static_obstacle/implementation",
+					"title": "Company-specific implementation details for static obstacles (abstract)",
+					"oneOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/abstract_element" }
+					]
+				}
+			},
+			"required": [ "name", "uuid", "initial", "asset" ]
+		}
+	}
+}

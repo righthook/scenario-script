@@ -1,0 +1,7 @@
+{
+  "model": {
+    "alignment": "chaotic good",
+    "type": "ref_co_vehicle_intent_model"
+  },
+  "type": "vehicle_intent_wander"
+}

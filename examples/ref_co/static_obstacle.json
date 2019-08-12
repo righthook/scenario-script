@@ -1,0 +1,27 @@
+{
+  "initial": {
+    "location": {
+      "x": 1.0,
+      "y": 2.0,
+      "z": -3.0,
+      "type": "location_local"
+    },
+    "orientation": {
+      "e_x": 0.707,
+      "e_y": 0.707,
+      "e_z": 0.0,
+      "e_0": 0.0,
+      "type": "orientation_quaternion"
+    }
+  },
+  "asset": {
+    "name": "air_conditioner",
+    "type": "ref_co_static_obstacle_asset"
+  },
+  "name": "obstacle_000",
+  "uuid": "ffd42636-91f2-40aa-9fb8-2876dbabe872",
+  "implementation": {
+    "process": "static",
+    "type": "ref_co_agent_base_implementation"
+  }
+}
