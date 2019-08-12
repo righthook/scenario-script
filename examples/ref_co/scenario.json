@@ -1,0 +1,154 @@
+{
+  "version": "v0.1",
+  "uuid": "796b7e32-68cf-4153-a9ec-b5e2a42b4b43",
+  "environment": {
+    "place": {
+      "name": "thunderhill",
+      "type": "ref_co_scenario_place"
+    },
+    "time": {
+      "time": "Wed Jul 10 18:05:18 PDT 2019",
+      "type": "ref_co_scenario_time"
+    },
+    "weather": {
+      "raining": true,
+      "type": "ref_co_scenario_weather"
+    }
+  },
+  "actors": {
+    "vehicles": [
+      {
+        "initial": {
+          "velocity": {
+            "u": 25.0,
+            "v": 0.1,
+            "w": -0.1,
+            "type": "velocity_body_frame"
+          },
+          "angular_velocity": {
+            "p": 0.1,
+            "q": -0.1,
+            "r": 1.0,
+            "type": "angular_velocity_body_frame"
+          },
+          "location": {
+            "x": 1.0,
+            "y": 2.0,
+            "z": -3.0,
+            "type": "location_local"
+          },
+          "orientation": {
+            "e_x": 0.707,
+            "e_y": 0.707,
+            "e_z": 0.0,
+            "e_0": 0.0,
+            "type": "orientation_quaternion"
+          }
+        },
+        "asset": {
+          "year": 2004,
+          "make": "BMW",
+          "model": "330Ci",
+          "type": "ref_co_vehicle_asset_simple"
+        },
+        "intent": {
+          "model": {
+            "alignment": "chaotic good",
+            "type": "ref_co_vehicle_intent_model"
+          },
+          "type": "vehicle_intent_wander"
+        },
+        "name": "vehicle_000",
+        "uuid": "1a1a204d-baa9-4af7-bc8c-52e8f6980431",
+        "implementation": {
+          "vehicle_physics_model": "advanced",
+          "process": "traffic",
+          "type": "ref_co_vehicle_implementation"
+        }
+      }
+    ],
+    "pedestrians": [
+      {
+        "initial": {
+          "velocity": {
+            "u": 25.0,
+            "v": 0.1,
+            "w": -0.1,
+            "type": "velocity_body_frame"
+          },
+          "angular_velocity": {
+            "p": 0.1,
+            "q": -0.1,
+            "r": 1.0,
+            "type": "angular_velocity_body_frame"
+          },
+          "location": {
+            "x": 1.0,
+            "y": 2.0,
+            "z": -3.0,
+            "type": "location_local"
+          },
+          "orientation": {
+            "e_x": 0.707,
+            "e_y": 0.707,
+            "e_z": 0.0,
+            "e_0": 0.0,
+            "type": "orientation_quaternion"
+          }
+        },
+        "asset": {
+          "name": "anthony_davis",
+          "height_cm": 208.0,
+          "type": "ref_co_pedestrian_asset"
+        },
+        "intent": {
+          "model": {
+            "precision": 0.9,
+            "type": "ref_co_pedestrian_intent_model"
+          },
+          "type": "pedestrian_intent_wander"
+        },
+        "name": "pedestrian_000",
+        "uuid": "c3e0cf16-f76e-4848-8dd1-bcd229244f07",
+        "implementation": {
+          "animation_set": 1,
+          "process": "foot_traffic",
+          "type": "ref_co_pedestrian_implementation"
+        }
+      }
+    ]
+  },
+  "static_obstacles": [
+    {
+      "initial": {
+        "location": {
+          "x": 1.0,
+          "y": 2.0,
+          "z": -3.0,
+          "type": "location_local"
+        },
+        "orientation": {
+          "e_x": 0.707,
+          "e_y": 0.707,
+          "e_z": 0.0,
+          "e_0": 0.0,
+          "type": "orientation_quaternion"
+        }
+      },
+      "asset": {
+        "name": "air_conditioner",
+        "type": "ref_co_static_obstacle_asset"
+      },
+      "name": "obstacle_000",
+      "uuid": "4f27f3dc-29af-4850-be85-1a2772be74b1",
+      "implementation": {
+        "process": "static",
+        "type": "ref_co_agent_base_implementation"
+      }
+    }
+  ],
+  "implementation": {
+    "debug_mode": true,
+    "type": "ref_co_scenario_implementation"
+  }
+}

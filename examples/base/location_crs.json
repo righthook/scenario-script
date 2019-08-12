@@ -1,0 +1,7 @@
+{
+  "crs": "+proj\u003dtmerc +lat_0\u003d0.0 +lon_0\u003d0.0 +k\u003d1 +x_0\u003d0 +y_0\u003d0 +ellps\u003dWGS84 +towgs84\u003d0,0,0,0,0,0,0 +units\u003dm +no_defs",
+  "x": 1.0,
+  "y": 2.0,
+  "z": -3.0,
+  "type": "location_crs"
+}

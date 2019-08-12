@@ -1,0 +1,4 @@
+{
+  "yaw_rate": 1.0,
+  "type": "angular_velocity_body_frame_1d"
+}

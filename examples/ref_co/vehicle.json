@@ -1,0 +1,50 @@
+{
+  "initial": {
+    "velocity": {
+      "u": 25.0,
+      "v": 0.1,
+      "w": -0.1,
+      "type": "velocity_body_frame"
+    },
+    "angular_velocity": {
+      "p": 0.1,
+      "q": -0.1,
+      "r": 1.0,
+      "type": "angular_velocity_body_frame"
+    },
+    "location": {
+      "x": 1.0,
+      "y": 2.0,
+      "z": -3.0,
+      "type": "location_local"
+    },
+    "orientation": {
+      "e_x": 0.707,
+      "e_y": 0.707,
+      "e_z": 0.0,
+      "e_0": 0.0,
+      "type": "orientation_quaternion"
+    }
+  },
+  "asset": {
+    "trim": "ZHP",
+    "year": 2004,
+    "make": "BMW",
+    "model": "330Ci",
+    "type": "ref_co_vehicle_asset_complex"
+  },
+  "intent": {
+    "model": {
+      "alignment": "chaotic good",
+      "type": "ref_co_vehicle_intent_model"
+    },
+    "type": "vehicle_intent_wander"
+  },
+  "name": "vehicle_000",
+  "uuid": "3e3e05c2-15ac-4968-a431-dbe5cddac485",
+  "implementation": {
+    "vehicle_physics_model": "advanced",
+    "process": "traffic",
+    "type": "ref_co_vehicle_implementation"
+  }
+}

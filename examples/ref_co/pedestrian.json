@@ -1,0 +1,48 @@
+{
+  "initial": {
+    "velocity": {
+      "u": 25.0,
+      "v": 0.1,
+      "w": -0.1,
+      "type": "velocity_body_frame"
+    },
+    "angular_velocity": {
+      "p": 0.1,
+      "q": -0.1,
+      "r": 1.0,
+      "type": "angular_velocity_body_frame"
+    },
+    "location": {
+      "x": 1.0,
+      "y": 2.0,
+      "z": -3.0,
+      "type": "location_local"
+    },
+    "orientation": {
+      "e_x": 0.707,
+      "e_y": 0.707,
+      "e_z": 0.0,
+      "e_0": 0.0,
+      "type": "orientation_quaternion"
+    }
+  },
+  "asset": {
+    "name": "anthony_davis",
+    "height_cm": 208.0,
+    "type": "ref_co_pedestrian_asset"
+  },
+  "intent": {
+    "model": {
+      "precision": 0.9,
+      "type": "ref_co_pedestrian_intent_model"
+    },
+    "type": "pedestrian_intent_wander"
+  },
+  "name": "pedestrian_000",
+  "uuid": "17ab57df-4eaa-4fef-8ca8-463377ad532e",
+  "implementation": {
+    "animation_set": 1,
+    "process": "foot_traffic",
+    "type": "ref_co_pedestrian_implementation"
+  }
+}
